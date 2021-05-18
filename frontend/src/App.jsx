@@ -24,16 +24,16 @@ const App = () => {
   const [requestConfig, setRequestConfig] = useState({
     nSamples: 5,
     lengthPrefix: 500,
-    length: 96,
-    temperature: 0.9,
-    topk: 0,
-    topp: 0.9,
+    length: 24,
+    temperature: 1.0,
+    topk: 50,
+    topp: 0.95,
   })
 
   const toggleSidebar = () => setCollapsedSidebar(!collapsedSidebar)
 
   const handleLoadingMentionEvent = useCallback(() => {
-    return "Loading..."
+    return "טוען..."
   }, [])
 
   const handleFetchMentionEvent = useCallback(
@@ -88,19 +88,20 @@ const App = () => {
 
   const toolbarConfig = [
     [{ header: [1, 2, false] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
+    ["bold", "italic", "underline", "strike", "blockquote", "align"],
     [
       { list: "ordered" },
       { list: "bullet" },
       { indent: "-1" },
       { indent: "+1" },
+      { direction: "rtl" },
     ],
     ["link", "image"],
     ["clean"],
   ]
 
   const mentionConfig = {
-    allowedChars: /^[A-Za-z\s]*$/,
+    allowedChars: /^[א-ת0-9A-Za-z\s]*$/,
     mentionDenotationChars: ["@"],
     blotName: "custom_mention",
     fixMentionsToQuill: false,
@@ -121,9 +122,11 @@ const App = () => {
     "underline",
     "strike",
     "blockquote",
+    "align",
     "list",
     "bullet",
     "indent",
+    "direction",
     "link",
     "image",
     "custom_mention",
@@ -215,7 +218,7 @@ const App = () => {
           <ReactQuill
             ref={reactQuillRef}
             theme="snow"
-            placeholder="Enter something..."
+            placeholder="כתבו פה משהו והשתמשו בסימן @ על מנת לייצר השלמות"
             modules={modules}
             formats={formats}
             value={editorContent}

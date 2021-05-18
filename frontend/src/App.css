@@ -1,3 +1,4 @@
+
 .sidebar {
   padding: 1rem;
 }
@@ -27,6 +28,8 @@
 }
 .container {
   padding: 1rem 2rem;
+  direction: rtl;
+  text-align: right;
 }
 .btn {
   width: 7rem;
@@ -46,11 +49,17 @@
 }
 .ql-mention-list-container {
   width: 1200px;
+  direction: rtl;
+  text-align: right;
 }
 .ql-mention-list-container-top {
   top: 0;
+  direction: rtl;
+  text-align: right;
 }
 .mention {
   background-color: white;
   user-select: text;
+  direction: rtl;
+  text-align: right;
 }

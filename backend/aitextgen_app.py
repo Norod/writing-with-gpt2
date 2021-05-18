@@ -12,7 +12,8 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    model_name: str = "distilgpt2"
+    model_name: str = "Norod78/hebrew-gpt_neo-tiny"
+    tokenizer_name: str = "Norod78/hebrew-gpt_neo-tiny"
     config_file: str = None
     use_gpu: bool = False
 
@@ -31,12 +32,12 @@ class InputSentence(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "prefix": "Hello world, my name is",
-                "nsamples": 5,
+                "prefix": "שלום לכולם, קוראים לי ",
+                "nsamples": 1,
                 "length": 160,
                 "temperature": 0.9,
-                "topk": 0,
-                "topp": 0.9,
+                "topk": 50,
+                "topp": 0.95,
             }
         }
 
@@ -56,8 +57,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+print("Load model_name = " + str(settings.model_name) + ", tokenizer_name = " + str(settings.tokenizer_name))
 ai = aitextgen(
-    model=settings.model_name, config=settings.config_file, to_gpu=settings.use_gpu
+    model=settings.model_name, tokenizer=settings.tokenizer_name, config=settings.config_file, to_gpu=settings.use_gpu
 )
 generate_count = 0
 
@@ -79,7 +81,7 @@ try:
         name="React-static",
     )
 except:
-    print("WARNING: Did not found folder for built React app in ../frontend/build")
+    print("WARNING: Did not find folder for built React app in ../frontend/build")
 
 
 @app.post("/api/suggest", response_model=List[OutputSuggestion])
@@ -108,8 +110,9 @@ def generate_sentences(body: InputSentence):
     generate_count += 1
     if generate_count == 8:
         # Reload model to prevent Graph/Session from going OOM
+        print("Reload: model_name = " + str(settings.model_name) + ", tokenizer_name = " + str(settings.tokenizer_name))
         ai = aitextgen(
-            model=settings.model_name, config=settings.config_file, to_gpu=settings.use_gpu
+            model=settings.model_name, tokenizer=settings.tokenizer_name, config=settings.config_file, to_gpu=settings.use_gpu
         )
         generate_count = 0
 
